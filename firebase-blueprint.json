@@ -1,0 +1,150 @@
+{
+  "entities": {
+    "Member": {
+      "title": "Member",
+      "description": "ADC Club Member entity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "registeredDate": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "enum": ["AKTIF", "TIDAK_AKTIF"] },
+        "monthlyFee": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "status", "monthlyFee"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Annual monthly payment record for a member",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "memberId": { "type": "string" },
+        "memberName": { "type": "string", "maxLength": 150 },
+        "year": { "type": "number" },
+        "monthlyAmounts": { "type": "object" },
+        "totalPaid": { "type": "number" },
+        "totalDue": { "type": "number" },
+        "arrears": { "type": "number" },
+        "status": { "type": "string", "enum": ["SELESAI", "SEBAHAGIAN", "TERTUNGGAK", "BELUM BAYAR"] },
+        "updatedAt": { "type": "string" },
+        "updatedBy": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["id", "memberId", "year", "totalPaid", "arrears", "status"]
+    },
+    "Income": {
+      "title": "Income",
+      "description": "ADC income transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "trxId": { "type": "string", "maxLength": 50 },
+        "date": { "type": "string", "maxLength": 30 },
+        "category": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 300 },
+        "amount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "officer": { "type": "string", "maxLength": 100 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "trxId", "date", "category", "amount"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "ADC expense transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "trxId": { "type": "string", "maxLength": 50 },
+        "date": { "type": "string", "maxLength": 30 },
+        "category": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 300 },
+        "amount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "recipient": { "type": "string", "maxLength": 150 },
+        "receiptNo": { "type": "string", "maxLength": 100 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "trxId", "date", "category", "amount"]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "Club financial and operational configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clubName": { "type": "string", "maxLength": 150 },
+        "year": { "type": "number" },
+        "defaultMonthlyFee": { "type": "number" },
+        "openingBalance": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "clubName", "year", "defaultMonthlyFee"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Audit trail record for tracking data changes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "userName": { "type": "string", "maxLength": 100 },
+        "userRole": { "type": "string", "maxLength": 50 },
+        "action": { "type": "string", "maxLength": 150 },
+        "details": { "type": "string", "maxLength": 1000 },
+        "previousData": { "type": "string", "maxLength": 2000 },
+        "newData": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "timestamp", "userName", "action"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Club committee member user profile and role",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "maxLength": 150 },
+        "displayName": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["ADMIN", "BENDAHARI", "AJK"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/members/{memberId}": {
+      "schema": "Member",
+      "description": "ADC club member directory"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Monthly dues records per member per year"
+    },
+    "/income/{incomeId}": {
+      "schema": "Income",
+      "description": "ADC income ledger entries"
+    },
+    "/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "ADC expenditure ledger entries"
+    },
+    "/settings/{settingId}": {
+      "schema": "Setting",
+      "description": "ADC club settings and opening balances"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Audit logs for tracking edits"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Club user permissions and roles"
+    }
+  }
+}
